@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <h1>初期設定</h1>
+{% endblock %}
+
+{% block content %}
+    <!-- ▼▼▼リスト 5-8追加部分▼▼▼ -->
+    <div style="color: red;">
+        {% if form.errors %}
+            <ul>
+            === エラーメッセージ ===
+            {% for k, v in form.errors.items() %}
+                <li>{{k}}:{{v}}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <!-- ▲▲▲リスト 5-8追加部分▲▲▲ -->
+    <form method="POST">
+        {{ form.GoalAmount.label }}{{ form.GoalAmount() }}<br>
+        {{ form.AchievementDay.label }}{{ form.AchievementDay() }}<br>
+        <p>時給</p>
+        <p>平日 {{ form.NomalTimeWage.label }}{{ form.NomalTimeWage() }}  {{ form.NightTimeWage.label }}{{ form.NightTimeWage() }}  {{ form.MidnightTimeWage.label }}{{ form.MidnightTimeWage() }}</p>
+        <p>土日祝 {{ form.NomalTimeWage.label }}{{ form.NomalTimeWage() }}  {{ form.NightTimeWage.label }}{{ form.NightTimeWage() }}  {{ form.MidnightTimeWage.label }}{{ form.MidnightTimeWage() }}</p>
+        
+        {{ form.submit() }}
+    </form>
+{% endblock %}

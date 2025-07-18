@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <h1>WTForm：結果</h1>
+{% endblock %}
+
+{% block content %}
+    <ul>
+        <li>{{ form.GoalAmount.data }}</li>
+        <li>{{ form.AchievementDay.data }}</li>
+        <li><p>時給</p></li>
+        <p>平日 {{ form.NomalTimeWage.data }}  {{ form.NightTimeWage.data }}  {{ form.MidnightTimeWage.data }}</p>
+        <p>土日祝 {{ form.NomalTimeWage.data }}  {{ form.NightTimeWage.data }}  {{ form.MidnightTimeWage.data }}</p>
+        
+    </ul>
+{% endblock %}
+
