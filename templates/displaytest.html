@@ -9,8 +9,8 @@
         <li>{{ form.GoalAmount.data }}</li>
         <li>{{ form.AchievementDay.data }}</li>
         <li><p>時給</p></li>
-        <p>平日 {{ form.NomalTimeWage.data }}  {{ form.NightTimeWage.data }}  {{ form.MidnightTimeWage.data }}</p>
-        <p>土日祝 {{ form.NomalTimeWage.data }}  {{ form.NightTimeWage.data }}  {{ form.MidnightTimeWage.data }}</p>
+        <p>平日 {{ form.WeekdayNormalTimeWage.data }}  {{ form.WeekdayNightTimeWage.data }}  {{ form.WeekdayMidnightTimeWage.data }}</p>
+        <p>土日祝 {{ form.HolidayNormalTimeWage.data }}  {{ form.HolidayNightTimeWage.data }}  {{ form.HolidayMidnightTimeWage.data }}</p>
         
     </ul>
 {% endblock %}

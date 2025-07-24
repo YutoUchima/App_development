@@ -21,8 +21,8 @@
         {{ form.GoalAmount.label }}{{ form.GoalAmount() }}<br>
         {{ form.AchievementDay.label }}{{ form.AchievementDay() }}<br>
         <p>時給</p>
-        <p>平日 {{ form.NomalTimeWage.label }}{{ form.NomalTimeWage() }}  {{ form.NightTimeWage.label }}{{ form.NightTimeWage() }}  {{ form.MidnightTimeWage.label }}{{ form.MidnightTimeWage() }}</p>
-        <p>土日祝 {{ form.NomalTimeWage.label }}{{ form.NomalTimeWage() }}  {{ form.NightTimeWage.label }}{{ form.NightTimeWage() }}  {{ form.MidnightTimeWage.label }}{{ form.MidnightTimeWage() }}</p>
+        <p>平日 {{ form.WeekdayNormalTimeWage.label }}{{ form.WeekdayNormalTimeWage() }}  {{ form.WeekdayNightTimeWage.label }}{{ form.WeekdayNightTimeWage() }}  {{ form.WeekdayMidnightTimeWage.label }}{{ form.WeekdayMidnightTimeWage() }}</p>
+        <p>土日祝 {{ form.HolidayNormalTimeWage.label }}{{ form.HolidayNormalTimeWage() }}  {{ form.HolidayNightTimeWage.label }}{{ form.HolidayNightTimeWage() }}  {{ form.HolidayMidnightTimeWage.label }}{{ form.HolidayMidnightTimeWage() }}</p>
         
         {{ form.submit() }}
     </form>
