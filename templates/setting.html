@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    <!-- ▼▼▼リスト 5-8追加部分▼▼▼ -->
     <div style="color: red;">
         {% if form.errors %}
             <ul>
@@ -16,10 +15,15 @@
             </ul>
         {% endif %}
     </div>
-    <!-- ▲▲▲リスト 5-8追加部分▲▲▲ -->
+    
     <form method="POST">
         {{ form.GoalAmount.label }}{{ form.GoalAmount() }}<br>
         {{ form.AchievementDay.label }}{{ form.AchievementDay() }}<br>
+        <p>時給時間帯</p>
+        <p>{{ form.NormalStart.label }}{{ form.NormalStart() }}   {{ form.NormalEnd.label }}{{ form.NormalEnd() }}<br>   
+           {{ form.NightStart.label }}{{ form.NightStart() }}   {{ form.NightEnd.label }}{{ form.NightEnd() }}<br>
+           {{ form.MidnightStart.label }}{{ form.MidnightStart() }}   {{ form.MidnightEnd.label }}{{ form.MidnightEnd() }}</p>
+
         <p>時給</p>
         <p>平日 {{ form.WeekdayNormalTimeWage.label }}{{ form.WeekdayNormalTimeWage() }}  {{ form.WeekdayNightTimeWage.label }}{{ form.WeekdayNightTimeWage() }}  {{ form.WeekdayMidnightTimeWage.label }}{{ form.WeekdayMidnightTimeWage() }}</p>
         <p>土日祝 {{ form.HolidayNormalTimeWage.label }}{{ form.HolidayNormalTimeWage() }}  {{ form.HolidayNightTimeWage.label }}{{ form.HolidayNightTimeWage() }}  {{ form.HolidayMidnightTimeWage.label }}{{ form.HolidayMidnightTimeWage() }}</p>

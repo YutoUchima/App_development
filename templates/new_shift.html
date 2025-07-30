@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <h1>シフト新規登録</h1>
+{% endblock %}
+
+{% block content %}
+    <div style="color: red;">
+        {% if form.errors %}
+            <ul>
+            === エラーメッセージ ===
+            {% for k, v in form.errors.items() %}
+                <li>{{k}}:{{v}}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    
+    <form method="POST">
+        {{ form.ShiftDay.label }}{{ form.ShiftDay() }}<br>
+        <p>時間帯</p>
+        {{ form.StartTime.label }}{{ form.StartTime() }}<br>
+        {{ form.EndTime.label }}{{ form.EndTime() }}<br>
+        {{ form.BreakStartTime.label }}{{ form.BreakStartTime() }}<br>
+        {{ form.BreakEndTime.label }}{{ form.BreakEndTime() }}<br>
+        {{ form.DayType.label }}{{ form.DayType() }}<br>
+       
+        <input type="submit" value="追加" class="button">
+    </form>
+{% endblock %}
