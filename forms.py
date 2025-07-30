@@ -10,6 +10,11 @@ from wtforms.validators import (
 
 def generate_time_choices():
     choices = []
+    # 00:00を最初に追加
+    display = "00:00"
+    value = "00.0"
+    choices.append((value, display))
+
     for hour in range(6, 30):  # 6〜30時（翌朝6時）
         for minute in [0, 15, 30, 45]:
             display = f"{hour:02}:{minute:02}"  # 表示用：例 "06:30"
@@ -38,6 +43,14 @@ class SettingInfoForm(Form):
 
 # 達成目標日入力
     AchievementDay = DateField('目標達成日: ', validators=[DataRequired('達成日は必須入力です')], format="%Y-%m-%d", render_kw={"placeholder": "yyyy/mm/dd"})
+
+
+# 初期設定登録
+    submit = SubmitField('決定')
+
+
+
+class WageSettingInfoForm(Form):
 
 # 時給入力
 # 平日

@@ -6,8 +6,20 @@
 </head>
 <body>
     <div class="container">
+        <a href="{{ url_for('setting') }}" class="button">目標設定</a>
+        <a href="{{ url_for('wage_setting') }}" class="button">時給設定</a>
         <a href="{{ url_for('new_shift') }}" class="button">新規シフト</a>
-        <a href="{{ url_for('setting') }}" class="button">設定</a>
+        <a href="{{ url_for('display') }}" class="button">ディスプレイ</a>
+        {% if no_setting %}
+            <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+                目標設定がまだです。<a href="{{ url_for('setting') }}">こちら</a>から目標設定を行ってください。
+            </div>
+        {% endif %}
+        {% if wage_setting %}
+            <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+                時給設定がまだです。<a href="{{ url_for('wage_setting') }}">こちら</a>から時給設定を行ってください。
+            </div>
+        {% endif %}
         <hr>
         <h2 class="no-complete">未完了：シフト一覧</h2>
         <ul>
@@ -15,7 +27,7 @@
             <div>
                 <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
                     労働時間{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }}  休憩時間{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
-                    日給 {{ shift.DailyWage }}
+                    日給予想 ￥{{ shift.DailyWage }} 
                 </p>
                 <form method="post" action="{{ url_for('complete_shift', shift_id=shift.ShiftID) }}" style="display:inline;">
                     <button type="submit" class="complete-button">完了</button>
@@ -35,7 +47,7 @@
             <div>
                <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
                     労働時間{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }}  休憩時間{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
-                    日給 {{ shift.DailyWage }}
+                    日給 ￥{{ shift.DailyWage }} 
                 </p>
                 <form method="post" action="{{ url_for('uncomplete_shift', shift_id=shift.ShiftID) }}">
                     <button type="submit" class="uncomplete-button">戻す</button>

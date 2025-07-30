@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <h1>ディスプレイ</h1>
+{% endblock %}
+
+{% block content %}
+    
+        <p>目標金額 ￥{{ setting.GoalAmount }}</p>
+        <p>達成目標日{{ setting.AchievementDay }}</p>
+
+        <p>現在収益 ￥{{ display.CurrentAmount }}</p>
+        <p>残り金額 ￥{{ display.RemainingAmount }}</p>
+        <p>残り労働時間目安 {{ display.RemainingWorkTime }}時間</p>
+
+        <a href="{{ url_for('home') }}">戻る</a>
+
+        
+{% endblock %}
+

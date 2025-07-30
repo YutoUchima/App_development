@@ -122,6 +122,7 @@ class Display(db.Model):
 # ルーティング
 # ==================================================
 from forms import SettingInfoForm
+from forms import WageSettingInfoForm
 from forms import ShiftInfoForm
 
 
@@ -129,10 +130,14 @@ from forms import ShiftInfoForm
 @app.route('/')
 def home():
     # 未完了課題を取得
-    uncompleted_shifts  = Shift.query.filter_by(Complete = False).all()
+    uncompleted_shifts  = Shift.query.filter_by(Complete = False).order_by(Shift.ShiftDay.asc()).all()
     # 完了課題を取得
-    completed_shifts  = Shift.query.filter_by(Complete=True).all()
-    return render_template('home.html', uncompleted_shifts=uncompleted_shifts, completed_shifts=completed_shifts)
+    completed_shifts  = Shift.query.filter_by(Complete=True).order_by(Shift.ShiftDay.asc()).all()
+    setting = Setting.query.first()
+    no_setting = (setting is None)
+    wage_setting = HourlyWage.query.first()
+    wage_setting = (wage_setting is None)
+    return render_template('home.html', uncompleted_shifts=uncompleted_shifts, completed_shifts=completed_shifts,no_setting=no_setting,wage_setting=wage_setting)
 
 
 # 登録
@@ -233,11 +238,41 @@ def uncomplete_shift(shift_id):
     db.session.commit()
     return redirect(url_for('home'))
 
-# ユーザー情報：入力
+# Setting
 @app.route('/setting', methods=['GET','POST'])
 def setting():
     # フォームの作成
     form = SettingInfoForm(request.form)
+    # POST
+    if request.method == "POST" and form.validate():
+        
+# Setting　テーブル
+        setting = Setting.query.first()
+        if setting:
+            # 更新処理
+            setting.GoalAmount = form.GoalAmount.data
+            setting.AchievementDay = form.AchievementDay.data
+        else:
+            # 新規作成
+            setting = Setting(
+                GoalAmount=form.GoalAmount.data,
+                AchievementDay=form.AchievementDay.data
+            )
+            db.session.add(setting)
+        db.session.commit()
+
+        return redirect(url_for('home'))
+    # POST以外と「form.validate()がfalse」
+    return render_template('setting.html', form=form)
+
+
+
+
+# Wage_setting
+@app.route('/wage_setting', methods=['GET','POST'])
+def wage_setting():
+    # フォームの作成
+    form = WageSettingInfoForm(request.form)
     # POST
     if request.method == "POST" and form.validate():
 
@@ -302,32 +337,56 @@ def setting():
                 MidnightEnd=form.MidnightEnd.data
             )
             db.session.add(holiday_wage)
-
-
         db.session.commit()
-
-
-# Setting　テーブル
-        setting = Setting.query.first()
-        if setting:
-            # 更新処理
-            setting.GoalAmount = form.GoalAmount.data
-            setting.AchievementDay = form.AchievementDay.data
-            
-        else:
-            # 新規作成
-            setting = Setting(
-                GoalAmount=form.GoalAmount.data,
-                AchievementDay=form.AchievementDay.data
-            )
-            db.session.add(setting)
-        db.session.commit()
-
-
 
         return redirect(url_for('home'))
     # POST以外と「form.validate()がfalse」
-    return render_template('setting.html', form=form)
+    return render_template('wage_setting.html', form=form)
+
+
+
+@app.route('/display', methods=['GET'])
+def display():
+    # シフトの合計日給（完了分のみ集計）
+    current_amount = db.session.query(db.func.sum(Shift.DailyWage)).filter_by(Complete=True).scalar() or 0
+
+    # 設定情報取得（目標金額など）
+    setting = Setting.query.first()
+    if setting:
+        goal_amount = setting.GoalAmount
+        remaining_amount = max(goal_amount - current_amount, 0) #残り金額の計算
+    else:
+        goal_amount = 0
+        remaining_amount = 0
+
+    # 時給（平日の基本時給）で仮の残り労働時間を算出（※改善の余地あり）
+    weekday_wage = HourlyWage.query.filter_by(DayType=False).first()
+    if weekday_wage and weekday_wage.NormalTimeWage > 0:
+        remaining_work_time = round(remaining_amount / weekday_wage.NormalTimeWage, 2)
+    else:
+        remaining_work_time = 0
+
+    # テーブルに保存（初回 or 更新）
+    display = Display.query.first()
+    if display:
+        display.CurrentAmount = current_amount
+        display.RemainingAmount = remaining_amount
+        display.RemainingWorkTime = remaining_work_time
+    else:
+        display = Display(
+            CurrentAmount=current_amount,
+            RemainingAmount=remaining_amount,
+            RemainingWorkTime=remaining_work_time
+        )
+        db.session.add(display)
+
+    db.session.commit()
+
+    return render_template('display.html', display=display,setting=setting)
+
+
+
+
 
 # float → 時刻の文字列へ変換する
 def float_to_time_str(f):

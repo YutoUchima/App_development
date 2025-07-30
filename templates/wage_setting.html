@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <h1>初期設定</h1>
+{% endblock %}
+
+{% block content %}
+    <div style="color: red;">
+        {% if form.errors %}
+            <ul>
+            === エラーメッセージ ===
+            {% for k, v in form.errors.items() %}
+                <li>{{k}}:{{v}}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    
+    <form method="POST">
+        <p>時給時間帯</p>
+        <p>{{ form.NormalStart.label }}{{ form.NormalStart() }}   {{ form.NormalEnd.label }}{{ form.NormalEnd() }}<br>   
+           {{ form.NightStart.label }}{{ form.NightStart() }}   {{ form.NightEnd.label }}{{ form.NightEnd() }}<br>
+           {{ form.MidnightStart.label }}{{ form.MidnightStart() }}   {{ form.MidnightEnd.label }}{{ form.MidnightEnd() }}</p>
+
+        <p>時給</p>
+        <p>平日 {{ form.WeekdayNormalTimeWage.label }}{{ form.WeekdayNormalTimeWage() }}  {{ form.WeekdayNightTimeWage.label }}{{ form.WeekdayNightTimeWage() }}  {{ form.WeekdayMidnightTimeWage.label }}{{ form.WeekdayMidnightTimeWage() }}</p>
+        <p>土日祝 {{ form.HolidayNormalTimeWage.label }}{{ form.HolidayNormalTimeWage() }}  {{ form.HolidayNightTimeWage.label }}{{ form.HolidayNightTimeWage() }}  {{ form.HolidayMidnightTimeWage.label }}{{ form.HolidayMidnightTimeWage() }}</p>
+        
+        {{ form.submit() }}
+    </form>
+{% endblock %}
