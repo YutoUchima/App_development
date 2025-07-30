@@ -7,12 +7,16 @@
 <body>
     <div class="container">
         <a href="{{ url_for('new_shift') }}" class="button">新規シフト</a>
+        <a href="{{ url_for('setting') }}" class="button">設定</a>
         <hr>
         <h2 class="no-complete">未完了：シフト一覧</h2>
         <ul>
             {% for shift in uncompleted_shifts %}
             <div>
-                <p>{{ shift.ShiftDay }}</p>
+                <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
+                    労働時間{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }}  休憩時間{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
+                    日給 {{ shift.DailyWage }}
+                </p>
                 <form method="post" action="{{ url_for('complete_shift', shift_id=shift.ShiftID) }}" style="display:inline;">
                     <button type="submit" class="complete-button">完了</button>
                 </form>
@@ -29,7 +33,10 @@
         <ul>
             {% for shift in completed_shifts %}
             <div>
-                <p>{{ shift.ShiftDay }} </p>
+               <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
+                    労働時間{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }}  休憩時間{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
+                    日給 {{ shift.DailyWage }}
+                </p>
                 <form method="post" action="{{ url_for('uncomplete_shift', shift_id=shift.ShiftID) }}">
                     <button type="submit" class="uncomplete-button">戻す</button>
                 </form>

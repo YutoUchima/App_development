@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4a13d89d7754
+Revision ID: 5f11fcc8dd81
 Revises: 
-Create Date: 2025-07-28 17:52:48.657749
+Create Date: 2025-07-30 15:14:50.875676
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4a13d89d7754'
+revision = '5f11fcc8dd81'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,9 +51,10 @@ def upgrade():
     sa.Column('StartTime', sa.Float(), nullable=False),
     sa.Column('EndTime', sa.Float(), nullable=False),
     sa.Column('BreakStartTime', sa.Float(), nullable=False),
-    sa.Column('BreakeEndTime', sa.Float(), nullable=False),
+    sa.Column('BreakEndTime', sa.Float(), nullable=False),
     sa.Column('DayType', sa.Integer(), nullable=False),
-    sa.Column('Complete', sa.Boolean(), nullable=True),
+    sa.Column('DailyWage', sa.Integer(), nullable=False),
+    sa.Column('Complete', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['DayType'], ['hourly_wage.DayType'], ),
     sa.PrimaryKeyConstraint('ShiftID')
     )

@@ -9,17 +9,20 @@ from wtforms.validators import (
 
 
 def generate_time_choices():
-        choices = []
-        for hour in range(6, 30):  # 6〜30時（翌朝6時）
-            for minute in [0, 15, 30, 45]:
-                display = f"{hour:02}:{minute:02}"  # 例: 06:15
-                value = f"{hour}.{minute:02}"       # 例: 6.15 など floatに変換しやすくする
-                choices.append((value, display))
+    choices = []
+    for hour in range(6, 30):  # 6〜30時（翌朝6時）
+        for minute in [0, 15, 30, 45]:
+            display = f"{hour:02}:{minute:02}"  # 表示用：例 "06:30"
+            float_value = hour + minute / 60    # 保存用：例 6 + 30/60 = 6.5
+            value = str(round(float_value, 2))  # 文字列に変換して渡す（例 "6.5"）
+            choices.append((value, display))
 
-        display = f"{30:02}:{0:02}"  # 例: 30:00
-        value = f"{30}.{0:02}"        
-        choices.append((value, display))
-        return choices
+    # 30:00を最後に追加
+    display = "30:00"
+    value = "30.0"
+    choices.append((value, display))
+
+    return choices
 
 
 
@@ -90,4 +93,7 @@ class ShiftInfoForm(Form):
             self.EndTime.choices = time_choices
             self.BreakStartTime.choices = time_choices
             self.BreakEndTime.choices = time_choices
+
+            
+
             

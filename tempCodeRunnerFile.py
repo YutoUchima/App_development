@@ -81,9 +81,7 @@ class Shift(db.Model):
    BreakStartTime = db.Column(db.Float, nullable=False)
    BreakEndTime = db.Column(db.Float, nullable=False)
    DayType = db.Column(db.Integer, db.ForeignKey('hourly_wage.DayType'), nullable=False)
-   DailyWage = db.Column(db.Integer,nullable=False)
    Complete = db.Column(db.Boolean, default=False, nullable=False)
-   
 
    def __repr__(self):
       return f'<Shift id={self.ShiftID}, DayType={self.DayType} >'
@@ -149,47 +147,16 @@ def new_shift():
         shift = Shift.query.filter_by(Complete=False).first()
 
 
-
-        def zennikkyuu(wage: HourlyWage, start: float, end: float) -> int:
-            total = 0
-            time_zone = [
-                (wage.NormalStart, wage.NormalEnd, wage.NormalTimeWage),
-                (wage.NightStart, wage.NightEnd, wage.NightTimeWage),
-                (wage.MidnightStart, wage.MidnightEnd, wage.MidnightTimeWage),
-            ]
-            for tz_start, tz_end, wage in time_zone:
-                if end <= tz_start:
-                    break
-                work_start = max(start, tz_start)
-                work_end = min(end, tz_end)
-                if work_start < work_end:
-                    total += (work_end - work_start) * wage
-            return int(total)
-
-        def kyuukei(wage: HourlyWage, break_start: float, break_end: float) -> int:
-            return zennikkyuu(wage, break_start, break_end)
-
-
-        # 該当の時給設定を取得
-        wage = HourlyWage.query.filter_by(DayType=(form.DayType.data == 'holiday')).first()
-
-        # 勤務時間・休憩時間に基づいて給与を計算
-        work_pay = zennikkyuu(wage, float(form.StartTime.data), float(form.EndTime.data))
-        break_pay = kyuukei(wage, float(form.BreakStartTime.data), float(form.BreakEndTime.data))
-        daily_wage = work_pay - break_pay
-
         # インスタンス生成
         shift = Shift(
-            ShiftDay=form.ShiftDay.data,
-            StartTime=float(form.StartTime.data),
-            EndTime=float(form.EndTime.data),
-            BreakStartTime=float(form.BreakStartTime.data),
-            BreakEndTime=float(form.BreakEndTime.data),
-            DayType=(form.DayType.data == 'holiday'),
-            DailyWage=daily_wage,
-            Complete=False
-        )
-
+                ShiftDay=form.ShiftDay.data,
+                StartTime=float(form.StartTime.data),
+                EndTime=float(form.EndTime.data),
+                BreakStartTime=float(form.BreakStartTime.data),
+                BreakEndTime=float(form.BreakEndTime.data),
+                DayType=(form.DayType.data == 'holiday'),
+                Complete=False
+            )
 
 
         # 登録
@@ -234,7 +201,7 @@ def uncomplete_shift(shift_id):
     return redirect(url_for('home'))
 
 # ユーザー情報：入力
-@app.route('/setting', methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def setting():
     # フォームの作成
     form = SettingInfoForm(request.form)
@@ -327,19 +294,7 @@ def setting():
 
         return redirect(url_for('home'))
     # POST以外と「form.validate()がfalse」
-    return render_template('setting.html', form=form)
-
-# float → 時刻の文字列へ変換する
-def float_to_time_str(f):
-    hour = int(f)
-    minute = int((f - hour) * 60)
-    return f"{hour:02d}:{minute:02d}"
-
-# テンプレートで使えるように登録
-app.jinja_env.filters['time_str'] = float_to_time_str
-
-
-
+    return render_template('home.html', form=form)
 
 # ==================================================
 # 実行
