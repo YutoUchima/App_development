@@ -1,20 +1,49 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <h1>ディスプレイ</h1>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
-    
-        <p>目標金額 ￥{{ setting.GoalAmount }}</p>
-        <p>達成目標日{{ setting.AchievementDay }}</p>
+        <style>
+    .underlined-row {
+        border-bottom: 2px solid black;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-family: 'Kosugi Maru', sans-serif;
+        display: flex;
+        justify-content: space-between;
+        width: 600px; /* 必要に応じて調整 */
+    }
+        </style>
 
-        <p>現在収益 ￥{{ display.CurrentAmount }}</p>
-        <p>残り金額 ￥{{ display.RemainingAmount }}</p>
-        <p>残り労働時間目安 {{ display.RemainingWorkTime }}時間</p>
+        <h1 class="underlined-row">
+            <span>目標金額</span>
+            <span>¥{{ setting.GoalAmount }}</span>
+        </h1>
+        <h1 class="underlined-row">
+            <span>達成目標日</span>
+            <span>{{ setting.AchievementDay }}</span>
+        </h1>
+        <h1 class="underlined-row">
+            <span>現在収益</span>
+            <span>¥{{ display.CurrentAmount }}</span>
+        </h1>
+        <h1 class="underlined-row">
+            <span>残り金額</span>
+            <span>¥{{ display.RemainingAmount }}</span>
+        </h1>
+        <h1 class="underlined-row">
+            <span>残り労働時間目安</span>
+            <span>{{ display.RemainingWorkTime }}時間</span>
+        </h1>
 
-        <a href="{{ url_for('home') }}">戻る</a>
+        
+
+        <a href="{{ url_for('home') }}" class="return-button">戻る</a>
 
         
 {% endblock %}
+ 
 

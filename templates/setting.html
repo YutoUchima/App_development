@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <h1>初期設定</h1>
+    <h1>目標設定</h1>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div style="color: red;">
+    
         {% if form.errors %}
             <ul>
             === エラーメッセージ ===
@@ -14,12 +15,14 @@
             {% endfor %}
             </ul>
         {% endif %}
-    </div>
+    
     
     <form method="POST">
         {{ form.GoalAmount.label }}{{ form.GoalAmount() }}<br>
         {{ form.AchievementDay.label }}{{ form.AchievementDay() }}<br>
         
-        {{ form.submit() }}
+        {{ form.submit(class_="big-button") }}  <a href="{{ url_for('home') }}" class="return-button">戻る</a>
     </form>
+
+    
 {% endblock %}

@@ -2,10 +2,11 @@
 
 {% block title %}
     <h1>シフト新規登録</h1>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div style="color: red;">
+    
         {% if form.errors %}
             <ul>
             === エラーメッセージ ===
@@ -14,7 +15,7 @@
             {% endfor %}
             </ul>
         {% endif %}
-    </div>
+    
     
     <form method="POST">
         {{ form.ShiftDay.label }}{{ form.ShiftDay() }}<br>
@@ -25,6 +26,7 @@
         {{ form.BreakEndTime.label }}{{ form.BreakEndTime() }}<br>
         {{ form.DayType.label }}{{ form.DayType() }}<br>
        
-        <input type="submit" value="追加" class="button">
+        <input type="submit" value="追加" class="add-button"> <a href="{{ url_for('home') }}" class="return-button">戻る</a>
     </form>
+
 {% endblock %}
