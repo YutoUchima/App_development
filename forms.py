@@ -1,6 +1,6 @@
 from wtforms import Form
 from wtforms.fields import (
-   IntegerField, DateField, SelectField, RadioField, TimeField, SubmitField, FloatField, BooleanField
+   IntegerField, DateField, SelectField, RadioField, SubmitField, BooleanField
 )
 # 使用するvalidatorをインポート
 from wtforms.validators import (
@@ -17,9 +17,9 @@ def generate_time_choices():
 
     for hour in range(6, 30):  # 6〜30時（翌朝6時）
         for minute in [0, 15, 30, 45]:
-            display = f"{hour:02}:{minute:02}"  # 表示用：例 "06:30"
-            float_value = hour + minute / 60    # 保存用：例 6 + 30/60 = 6.5
-            value = str(round(float_value, 2))  # 文字列に変換して渡す（例 "6.5"）
+            display = f"{hour:02}:{minute:02}"  
+            float_value = hour + minute / 60    
+            value = str(round(float_value, 2))  
             choices.append((value, display))
 
     # 30:00を最後に追加
@@ -35,24 +35,17 @@ def generate_time_choices():
 # Formクラス
 # ==================================================
 # ユーザー情報クラス
+
 class SettingInfoForm(Form):
-
-
-# 目標金額入力
     GoalAmount = IntegerField('目標金額: ', validators=[NumberRange(min=0, message='目標金額を０以上で入力してください')])
-
-# 達成目標日入力
     AchievementDay = DateField('目標達成日: ', validators=[DataRequired('達成日は必須入力です')], format="%Y-%m-%d", render_kw={"placeholder": "yyyy/mm/dd"})
 
-
-# 初期設定登録
     submit = SubmitField('決定')
 
 
 
 class WageSettingInfoForm(Form):
 
-# 時給入力
 # 平日
     WeekdayNormalTimeWage = IntegerField('通常: ', validators=[NumberRange(min=0, message='時給を０以上で入力してください')])
     WeekdayNightTimeWage = IntegerField('夜間: ', validators=[NumberRange(min=0, message='時給を０以上で入力してください')])
@@ -61,7 +54,6 @@ class WageSettingInfoForm(Form):
     HolidayNormalTimeWage = IntegerField('通常: ', validators=[NumberRange(min=0, message='時給を０以上で入力してください')])
     HolidayNightTimeWage = IntegerField('夜間: ', validators=[NumberRange(min=0, message='時給を０以上で入力してください')])
     HolidayMidnightTimeWage = IntegerField('深夜: ', validators=[NumberRange(min=0, message='時給を０以上で入力してください')])
-
 # 時間帯入力
     NormalStart = SelectField('通常開始', validators=[DataRequired(message='値を選択してください')])
     NormalEnd = SelectField('通常終了', validators=[DataRequired(message='値を選択してください')])
@@ -70,10 +62,7 @@ class WageSettingInfoForm(Form):
     MidnightStart = SelectField('深夜開始', validators=[DataRequired(message='値を選択してください')])
     MidnightEnd =SelectField('深夜終了', validators=[DataRequired(message='値を選択してください')])
 
-
-# 初期設定登録
     submit = SubmitField('決定')
-
 
     def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -86,6 +75,7 @@ class WageSettingInfoForm(Form):
             self.MidnightEnd.choices = time_choices
 
 
+
 class ShiftInfoForm(Form):
     ShiftDay = DateField('日付: ', validators=[DataRequired('日付は必須入力です')], format="%Y-%m-%d", render_kw={"placeholder": "yyyy/mm/dd"})
     StartTime = SelectField('開始時間', validators=[DataRequired(message='値を選択してください')])
@@ -96,8 +86,6 @@ class ShiftInfoForm(Form):
     Complete = BooleanField(default=False)
 
     submit = SubmitField('決定')
-
-
     
     def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

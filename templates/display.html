@@ -14,10 +14,9 @@
         font-family: 'Kosugi Maru', sans-serif;
         display: flex;
         justify-content: space-between;
-        width: 600px; /* 必要に応じて調整 */
+        width: 600px; 
     }
         </style>
-
         <h1 class="underlined-row">
             <span>目標金額</span>
             <span>¥{{ setting.GoalAmount }}</span>
@@ -39,11 +38,8 @@
             <span>{{ display.RemainingWorkTime }}時間</span>
         </h1>
 
-        
-
         <a href="{{ url_for('home') }}" class="return-button">戻る</a>
 
-        
 {% endblock %}
  
 
