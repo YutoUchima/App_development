@@ -1,57 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shift List</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <title>Shift List</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <a href="{{ url_for('setting') }}" class="button" style="display:inline;">目標設定</a>
-        <a href="{{ url_for('wage_setting') }}" class="button" style="display:inline;">時給設定</a>
-        <a href="{{ url_for('new_shift') }}" class="shift-button" style="display:inline;">新規シフト</a>
-        <a href="{{ url_for('display') }}" class="amount-button" style="display:inline;">金額表示</a>
-        {% if no_setting %}
-            <div style="color: red; font-weight: bold; margin-bottom: 10px;">
-                目標設定がまだです。<a href="{{ url_for('setting') }}">こちら</a>から目標設定を行ってください。
-            </div>
-        {% endif %}
-        {% if wage_setting %}
-            <div style="color: red; font-weight: bold; margin-bottom: 10px;">
-                時給設定がまだです。<a href="{{ url_for('wage_setting') }}">こちら</a>から時給設定を行ってください。
-            </div>
-        {% endif %}
-        <hr>
-        <h2 class="no-complete">未完了：シフト一覧</h2>
-        <ul>
-            {% for shift in uncompleted_shifts %}
-            <div>
-                <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
-                    労働時間:<span style="margin-right: 20px;"></span>{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }} <br>
-                    休憩時間:<span style="margin-right: 20px;"></span>{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
-                    日給予想:<span style="margin-right: 20px;"></span>¥{{ shift.DailyWage }} <br>
-                    <form method="post" action="{{ url_for('complete_shift', shift_id=shift.ShiftID) }}" style="display:inline;"><button type="submit" class="complete-button">完了</button></form> 
-                    <form method="post" action="{{ url_for('delete_shift', shift_id=shift.ShiftID) }}" style="display:inline;"><button type="submit" class="delete-button">削除</button></form><br>
+  <div class="container">
+      <a href="{{ url_for('setting') }}" class="button" style="display:inline;">目標設定</a>
+      <a href="{{ url_for('wage_setting') }}" class="button" style="display:inline;">時給設定</a>
+      <!-- <a href="{{ url_for('new_shift') }}" class="shift-button" style="display:inline;">新規シフト</a> -->
+       {% if setting_complete %}
+       <a href="{{ url_for('new_shift') }}" class="shift-button" style="display:inline;">新規シフト</a>
+       {% else %}
+       <button class="shift-button" style="display:inline;" disabled>新規シフト（設定未完了）</button>
+       {% endif %}
 
-                </p>
-            </div>
-            {% endfor %}
-        </ul>
-        <hr>
-        <h2 class="complete">完了：シフト一覧</h2>
-        <ul>
-            {% for shift in completed_shifts %}
-            <div>
-               <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
-                    労働時間:<span style="margin-right: 20px;"></span>{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }} <br>
-                    休憩時間:<span style="margin-right: 20px;"></span>{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
-                    日給予想:<span style="margin-right: 20px;"></span>¥{{ shift.DailyWage }} 
-                </p>
-                <form method="post" action="{{ url_for('uncomplete_shift', shift_id=shift.ShiftID) }}">
-                    <button type="submit" class="uncomplete-button">戻す</button>
-                </form>
-            </div>
-            {% endfor %}
-        </ul>
-    </div>
+
+      <a href="{{ url_for('display') }}" class="amount-button" style="display:inline;">金額表示</a>
+      {% if no_setting %}
+          <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+              目標設定がまだです。<a href="{{ url_for('setting') }}">こちら</a>から目標設定を行ってください。
+          </div>
+      {% endif %}
+      {% if wage_setting %}
+          <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+              時給設定がまだです。<a href="{{ url_for('wage_setting') }}">こちら</a>から時給設定を行ってください。
+          </div>
+      {% endif %}
+      <hr>
+      <h2 class="no-complete">未完了：シフト一覧</h2>
+      <ul>
+          {% for shift in uncompleted_shifts %}
+          <div>
+              <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
+                  労働時間:<span style="margin-right: 20px;"></span>{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }} <br>
+                  休憩時間:<span style="margin-right: 20px;"></span>{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
+                  日給予想:<span style="margin-right: 20px;"></span>¥{{ shift.DailyWage }} <br>
+                  <form method="post" action="{{ url_for('complete_shift', shift_id=shift.ShiftID) }}" style="display:inline;"><button type="submit" class="complete-button">完了</button></form>
+                  <form method="post" action="{{ url_for('delete_shift', shift_id=shift.ShiftID) }}" style="display:inline;"><button type="submit" class="delete-button">削除</button></form><br>
+
+
+              </p>
+          </div>
+          {% endfor %}
+      </ul>
+      <hr>
+      <h2 class="complete">完了：シフト一覧</h2>
+      <ul>
+          {% for shift in completed_shifts %}
+          <div>
+             <p>{{ shift.ShiftDay }}  {% if shift.DayType == 0 %}（平日）{% else %}（土日祝）{% endif %}  <br>
+                  労働時間:<span style="margin-right: 20px;"></span>{{ shift.StartTime|time_str }} 〜 {{ shift.EndTime|time_str }} <br>
+                  休憩時間:<span style="margin-right: 20px;"></span>{{ shift.BreakStartTime|time_str }} 〜 {{ shift.BreakEndTime|time_str }} <br>
+                  日給:<span style="margin-right: 20px;"></span>¥{{ shift.DailyWage }}
+              </p>
+              <form method="post" action="{{ url_for('uncomplete_shift', shift_id=shift.ShiftID) }}">
+                  <button type="submit" class="uncomplete-button">戻す</button>
+              </form>
+          </div>
+          {% endfor %}
+      </ul>
+  </div>
 </body>
 </html>
